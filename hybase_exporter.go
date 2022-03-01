@@ -9,12 +9,14 @@ import (
 	"github.com/prometheus/common/version"
 	"github.com/prometheus/exporter-toolkit/web"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"hybase_exporter/collector"
 	"net/http"
 	"os"
 )
 
 func init() {
 	//注册自身采集器
+	prometheus.Register(collector.NewHyBaseStatusCollector())
 	prometheus.MustRegister()
 }
 
