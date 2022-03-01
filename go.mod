@@ -2,7 +2,7 @@ module hybase_exporter
 
 require (
 	github.com/gin-gonic/gin v1.7.7
-	github.com/go-kit/log v0.1.0
+	github.com/go-kit/log v0.2.0
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/prometheus/client_golang v1.12.1

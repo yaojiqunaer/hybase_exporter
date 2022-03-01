@@ -1,9 +1,8 @@
 // Package client
-package main
+package client
 
 import (
 	"encoding/json"
-	"fmt"
 	"hybase_exporter/common/log"
 	"io/ioutil"
 	"net/http"
@@ -38,14 +37,14 @@ type HyBaseNode struct {
 
 //HyBaseClient Get the hybase http client instance
 type HyBaseClient struct {
-	protocol string
-	ip       string
-	port     int
+	Protocol string
+	Ip       string
+	Port     int
 }
 
 //getHyBaseUrl Get the api address based on the underlying path and URI
 func getHyBaseUrl(client HyBaseClient, uri string) string {
-	return client.protocol + "://" + client.ip + ":" + strconv.Itoa(client.port) + uri
+	return client.Protocol + "://" + client.Ip + ":" + strconv.Itoa(client.Port) + uri
 }
 
 //GetPublicStatus Send http request to hybase server and parse res to struct HyBaseResult
@@ -75,11 +74,4 @@ func parseHyBaseResult(result []byte) HyBaseResult {
 		return HyBaseResult{}
 	}
 	return hbr
-}
-
-func main() {
-	client := HyBaseClient{"http", "127.0.0.1", 5555}
-	fmt.Println(client)
-	status := GetPublicStatus(client)
-	fmt.Println(status)
 }
