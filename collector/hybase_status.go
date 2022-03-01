@@ -39,6 +39,7 @@ func (n *HyBaseCollector) Describe(ch chan<- *prometheus.Desc) {
 // 实现采集器Collect接口,真正采集动作
 func (n *HyBaseCollector) Collect(ch chan<- prometheus.Metric) {
 	n.mutex.Lock()
+	defer n.mutex.Unlock()
 	publicStatus := client.GetPublicStatus(hbCli)
 	bytes, _ := json.Marshal(publicStatus)
 	if publicStatus.Code != 0 {
@@ -102,7 +103,6 @@ func (n *HyBaseCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 
 	}
-	n.mutex.Unlock()
 }
 
 // NewHyBaseStatusCollector Collector

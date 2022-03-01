@@ -2,11 +2,15 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"hybase_exporter/common/log"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 const (
@@ -49,11 +53,26 @@ func getHyBaseUrl(client HyBaseClient, uri string) string {
 	return client.Protocol + "://" + client.Ip + ":" + strconv.Itoa(client.Port) + uri
 }
 
+var hbCli *http.Client = &http.Client{
+	Transport: &http.Transport{
+		DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			c, err := net.DialTimeout(network, addr, time.Second*3)
+			if err != nil {
+				fmt.Println("dail timeout", err)
+				return nil, err
+			}
+			return c, nil
+		},
+		IdleConnTimeout:       time.Second * 65,
+		ResponseHeaderTimeout: time.Second * 3,
+	},
+}
+
 // GetPublicStatus Send http request to hybase server and parse res to struct HyBaseResult
 func GetPublicStatus(client HyBaseClient) HyBaseResult {
 	url := getHyBaseUrl(client, hybasePublicStatus)
 	log.Info.Log("msg", "send request to "+url)
-	resp, err := http.Get(url)
+	resp, err := hbCli.Get(url)
 	if err != nil {
 		log.Error.Log("msg", err)
 		return HyBaseResult{}
