@@ -19,6 +19,7 @@ func init() {
 	promLogConfig := &promlog.Config{}
 	logger := promlog.New(promLogConfig)
 	flag.AddFlags(kingpin.CommandLine, promLogConfig)
+	// Stdout support
 	kingpin.CommandLine.UsageWriter(os.Stdout)
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
